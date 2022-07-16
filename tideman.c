@@ -274,7 +274,7 @@ query: THE winner
     // check all candidates 
     for (int i = 0; i < candidate_count; i++)
     {
-	// if "loser" over candidate i is already locked in the graph
+	// if "loser" -> candidate[i] exists, then there is a potential cyclic link
         if (locked[loser][i])
         {
 	    // check if candidate i has a cyclic link from "query"
