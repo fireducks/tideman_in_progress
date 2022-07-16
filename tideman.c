@@ -271,11 +271,13 @@ query: THE winner
     {
         return true;
     }
-    // check all candidates if anyone is a direct or indirect loser to "query"
+    // check all candidates 
     for (int i = 0; i < candidate_count; i++)
     {
+	// if "loser" over candidate i is already locked in the graph
         if (locked[loser][i])
         {
+	    // check if candidate i has a cyclic link from "query"
             if (is_cyclical(i, query))
             {
                 return true;
