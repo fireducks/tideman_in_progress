@@ -249,7 +249,7 @@ void lock_pairs(void)
 }
 
 
-bool is_cyclical (int steps, int loser, int query)
+bool is_cyclical (int loser, int query)
 /*
 this function is coded based on my shallow understanding of the graph theory.
 Basically it checks if the winner in the ith pair (pair[pair_seq].winner, aka THE winner)'s 
@@ -267,36 +267,24 @@ loser: THE winner (not necessarily a loser) / THE winner's loser etc;
 query: THE winner
 */
 {
-    int ngbr_cnt = 0;
-    int ngbr[MAX-1];
-
     if (loser == query)     //if the loser is THE winner, it's cyclical
     {
         return true;
     }
-    else if (steps == 0)        //if the function can't look deeper, go back one step
+    // check all candidates 
+    for (int i = 0; i < candidate_count; i++)
     {
-        return false;
-    }
-    else
-    {
-        for (int i = 0; i < pair_count; i++)        //cycling through all the pairs and registering all the losers of the loser in an array
+	// if "loser" -> candidate[i] exists, then there is a potential cyclic link
+        if (locked[loser][i])
         {
-            if (loser == pairs[i].winner)
-            {
-                ngbr[ngbr_cnt++] = pairs[i].loser;
-            }
-        }
-
-        for (int i = 0; i < ngbr_cnt; i++)      //cycling through the array of losers of the loser.
-        {
-            if (is_cyclical(steps - 1, ngbr[i], query) == true)    
+	    // check if candidate i has a cyclic link from "query"
+            if (is_cyclical(i, query))
             {
                 return true;
             }
         }
-        return false;       //if all losers of the loser are cycled and none match THE winner, go back one step
     }
+    return false;
 }
 
 // Print the winner of the election
